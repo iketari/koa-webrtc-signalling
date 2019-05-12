@@ -4,7 +4,9 @@ import * as Router from 'koa-router';
 const router = new Router();
 
 router.get('/', async (ctx) => {
-    ctx.body = 'Hello World!';
+    await ctx.render('index.pug', {
+        user: 'John'
+    });
 });
 
 router.get('/test', async (ctx) => {
