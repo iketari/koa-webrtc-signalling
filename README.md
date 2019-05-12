@@ -1,4 +1,4 @@
-# KoaJS & Typescript Starter Project
+# KoaJS & Typescript Signalling Server
 
 Requirements:
  * Node v8
@@ -15,5 +15,5 @@ Included middleware:
 
 ```
 npm i
-npm run watch-server
+npm run ts-node-dev
 ```
