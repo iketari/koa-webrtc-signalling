@@ -17,7 +17,7 @@ export class WebSocketController {
     })
 
     ws.addEventListener('message', (event) => {
-      this.trigger('message', event);
+      this.trigger('message', JSON.parse(event.data));
     });
   }
 
