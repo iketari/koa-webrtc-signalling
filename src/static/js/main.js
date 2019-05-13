@@ -1,15 +1,9 @@
 'use strict';
 
 
-let ws = new WebSocket(`ws://${location.host}/signalling`);
-
-ws.addEventListener('open', () => {
-  ws.send('hi!!');
-});
-
-ws.addEventListener('message', () => {
-  console.log('Message');
-});
+import {WebSocketController} from './modules/websocket.js';
+import {MainView} from './modules/view.js';
 
 
-window.ws = ws;
+let ws = new WebSocketController();
+window.view = new MainView(ws);

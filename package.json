@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/koa": "2.0.39",
     "@types/koa-router": "7.0.23",
+    "@types/koa-session": "5.10.0",
     "@types/koa-static": "4.0.1",
     "@types/koa-views": "2.0.3",
     "@types/koa-websocket": "5.0.3",
@@ -26,6 +27,7 @@
   "dependencies": {
     "koa": "2.3.0",
     "koa-router": "7.2.1",
+    "koa-session": "5.11.0",
     "koa-static": "5.0.0",
     "koa-websocket": "5.0.1"
   }

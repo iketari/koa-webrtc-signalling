@@ -7,13 +7,25 @@ export enum WSMessageTypes {
   OFFER = 'OFFER',
 }
 
+export enum WSMessageErrors {
+  WRONG_MSG_FORMAT = 'WRONG_MSG_FORMAT',
+}
+
 export interface IWSMessage {
   type: WSMessageTypes;
   from: string;
   to?: string;
 }
 
+const users: {[key: string]: Router.IRouterContext} = {};
+
 ws.get('/signalling', (ctx) => {
+
+  const send = (data: object) => ctx.websocket.send(JSON.stringify(data));
+
+  ctx.websocket.on('open', () => {
+
+  });
 
   ctx.websocket.on('message', (message: string) => {
       let messageObj: IWSMessage = null;
@@ -21,12 +33,16 @@ ws.get('/signalling', (ctx) => {
       try {
         messageObj = JSON.parse(message);
       } catch (e) {
-        console.log(e);
+        send({error: WSMessageErrors.WRONG_MSG_FORMAT, e});
+        return;
       }
 
       switch (messageObj.type) {
         case WSMessageTypes.REGISTER: {
 
+          users[messageObj.from] = ctx;
+          
+          // send response
         }
 
         default:
