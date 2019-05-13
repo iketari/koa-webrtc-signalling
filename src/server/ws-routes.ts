@@ -29,15 +29,13 @@ ws.get('/signalling', (ctx) => {
     to: ctx.session.username
   }));
 
-
   if (ctx.session.isNew) {
     console.log('new user')
   } else {
-    console.log(ctx.session.username);
+    console.log('username', ctx.session.username);
   }
 
   ctx.websocket.on('open', () => {
-
 
   });
 
