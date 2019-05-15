@@ -35,10 +35,6 @@ ws.get('/signalling', (ctx) => {
     console.log('username', ctx.session.username);
   }
 
-  ctx.websocket.on('open', () => {
-
-  });
-
   ctx.websocket.on('message', (message: string) => {
       let messageObj: IWSMessage = null;
 
@@ -60,12 +56,9 @@ ws.get('/signalling', (ctx) => {
 
           users[messageObj.from] = ctx;
 
-          ctx.session.username = messageObj.from;
-          ctx.session.save();
-
           send({
               type: WSMessageTypes.USER_LIST,
-              payload: []
+              payload: Object.keys(users)
             }
           );
         }
