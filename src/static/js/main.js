@@ -2,8 +2,8 @@
 
 
 import {WebSocketController} from './modules/websocket.js';
-import {MainView} from './modules/view.js';
+import {AppView} from './views/app.js';
 
 
 let ws = new WebSocketController();
-window.view = new MainView(ws);
+window.view = new AppView(ws);

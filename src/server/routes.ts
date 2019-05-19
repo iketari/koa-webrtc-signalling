@@ -17,7 +17,7 @@ router.get('/login', async (ctx) => {
         };
         ctx.status = 200;
     } else {
-        ctx.status = 404;
+        ctx.status = 401;
     }
 });
 

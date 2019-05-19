@@ -24,15 +24,30 @@ const users: {[key: string]: Router.IRouterContext} = {};
 
 ws.get('/signalling', (ctx) => {
 
-  const send = (data: IWSMessage) => ctx.websocket.send(JSON.stringify({
-    ...data,
-    to: ctx.session.username
-  }));
+  const currentUsername = ctx.session.username;
 
-  if (ctx.session.isNew) {
-    console.log('new user')
-  } else {
-    console.log('username', ctx.session.username);
+  if (!currentUsername) {
+    ctx.throw(403, `User ${currentUsername} is not logged in`);
+    return;
+  }
+
+  const send = (to: string) => {
+    const toCtx = users[to];
+
+    if (!toCtx) {
+      throw new Error(`There is no user like ${to}`);
+    }
+
+    return (data: IWSMessage) => toCtx.websocket.send(JSON.stringify({
+      ...data,
+      to
+    }));
+  };
+
+  const sendToAll = (data: IWSMessage) => {
+    Object.keys(users).forEach(username => {
+      send(username)(data);
+    });
   }
 
   ctx.websocket.on('message', (message: string) => {
@@ -41,7 +56,7 @@ ws.get('/signalling', (ctx) => {
       try {
         messageObj = JSON.parse(message);
       } catch (e) {
-        send({
+        send(ctx.session.username)({
           type: WSMessageTypes.ERROR,
           payload: {
             error: WSMessageErrors.WRONG_MSG_FORMAT,
@@ -56,17 +71,31 @@ ws.get('/signalling', (ctx) => {
 
           users[messageObj.from] = ctx;
 
-          send({
-              type: WSMessageTypes.USER_LIST,
-              payload: Object.keys(users)
-            }
-          );
+          sendToAll({
+            type: WSMessageTypes.USER_LIST,
+            payload: Object.keys(users)
+          });
+        }
+
+        case WSMessageTypes.OFFER: {
+
         }
 
         default:
           break;
       }
 
+  });
+
+  ctx.websocket.on('close', (code: string, reason: string) => {
+    const unloggedUsername = ctx.session.username;
+
+    delete users[unloggedUsername];
+
+    sendToAll({
+      type: WSMessageTypes.USER_LIST,
+      payload: Object.keys(users)
+    });
   });
 });
 

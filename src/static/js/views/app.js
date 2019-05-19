@@ -1,4 +1,4 @@
-export class MainView {
+export class AppView {
   constructor(websocket) {
     this.websocket = websocket;
 
@@ -7,6 +7,7 @@ export class MainView {
     this.start = start;
     this.stop = stop; 
     this.login = login;
+    this.users = users;
 
     this.setupListeners();
     this.doLogin();
